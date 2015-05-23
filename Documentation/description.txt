@@ -1,0 +1,9 @@
+Below I wrote up a short and quick high level description. I also attached a flow chart picture.
+
+NewGameBtn is pretty simple. It renders a button that's purpose is to reset and clear the games. On the click event, it calls it's parent's (App) handleNewGameClick function that triggers making a new game on the model.
+
+NewPlayersBtn also renders a button. On button click, it renders a Bootstrap modal dialog to let users change their player names. On submit, handleSubmit gets the values of the input and calls the parent's (App) handleNewGameClick function. The handleModalSubmit clears certain model values stored in localStorage.
+
+GameStatus and Scoreboard are pretty self explanatory. One updates the game status after each move (locate below the board) and the other updates the scoreboard.
+
+Game, Row, and Cell (which are all located in Game.jsx) is where most functionality is held. Row and Cell render the html to make the game board. When the User clicks a spot on the gameboard, the Cell component calls a grandparent function (through the Row component) named handleCellClick (located in the Game component) passing the location that was clicked. The handleCellClick pushs the clicked cell onto an array of cells owned by that player, it tests for gameOver. If it's a gameOver, we cleanUp by clearing each player's array of cells and updating the scoreboard. Either case, we update the model that stores the data.
