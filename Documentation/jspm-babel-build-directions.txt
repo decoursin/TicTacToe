@@ -1,0 +1,21 @@
+0) Install jspm and babel-node globally
+1) Create package.json by running npm init (default settings)
+2) jspm init. Default settings except we want babel
+3) In "babelOptions": [] add "blacklist" : [] after "optional"
+4) On the browser, it's System.import('app/main');
+5) The syntax is: jspm install npm:whatwg-fetch or npm install whatwg-fetch
+	-we import it like: import 'whatwg-fetch';
+
+put this in the head:
+		<script src="jspm_packages/system.js"></script>
+		<script src="config.js"></script>
+		<script>
+			System.import('app/main');
+		</script>
+
+Maybe I have to:
+- npm install browser-sync --save-dev
+- npm install jspm/jspm-cli -g  and npm install jspm --save-dev
+
+Remember to:
+- import object {name} and export {name}
