@@ -1,6 +1,6 @@
-var React = require('react');
+import React from 'react';
 
-var NewGame = React.createClass({
+var NewGameBtn = React.createClass({
     render: function () {
         return (
             <div>
@@ -12,4 +12,4 @@ var NewGame = React.createClass({
     }
 });
 
-module.exports = NewGame;
+export { NewGameBtn };

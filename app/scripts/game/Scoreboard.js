@@ -1,4 +1,4 @@
-var React = require('react');
+import React from 'react';
 
 var Scoreboard = React.createClass({
     render: function () {
@@ -16,4 +16,4 @@ var Scoreboard = React.createClass({
     }
 });
 
-module.exports = Scoreboard;
+export { Scoreboard };

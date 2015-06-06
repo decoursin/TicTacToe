@@ -1,8 +1,9 @@
-var React = require('react'),
-    GameStatus = require('./GameStatus'),
-    Scoreboard = require('./Scoreboard'),
-    app = require('./globals'),
-    _ = require('underscore');
+import React from 'react';
+import _ from 'underscore';
+
+import {GameStatus} from './GameStatus';
+import {Scoreboard} from './Scoreboard';
+import {globals} from './globals';
 
 var Game = React.createClass({
     getInitialState: function () {
@@ -25,7 +26,7 @@ var Game = React.createClass({
 		var gameOver = false,
 			cells = player.cells,
 			winningSolution = false;
-		var possibleSolutions = app.solutions[index];
+		var possibleSolutions = globals.solutions[index];
 		_.each(possibleSolutions, function (arr) {
 			if(_.contains(cells, arr[0]) && _.contains(cells, arr[1])) {
 				winningSolution = arr;
@@ -43,7 +44,7 @@ var Game = React.createClass({
             this.updateScoreboard(player);
             this.cleanUp(player, winningSolution);
         } else if(this.isTieGame()) {
-            this.cleanUp(app.TIE_GAME, '');
+            this.cleanUp(globals.TIE_GAME, '');
         } else {
             this.forceUpdate();
         }
@@ -88,7 +89,7 @@ var Game = React.createClass({
                         row={row}
                         onCellClick={this.handleCellClick}
                         players={this.props.model.players}
-                        isGameOver={(winner && winner != app.TIE_GAME) ? true : false} // Could use this.props.model.wasGameOver but it has a different purpose
+                        isGameOver={(winner && winner != globals.TIE_GAME) ? true : false} // Could use this.props.model.wasGameOver but it has a different purpose
                         winningSolution={this.state.winningSolution}
                    />
         }, this);
@@ -118,7 +119,8 @@ var Row = React.createClass({
     })(),
     getBorder: function (row) {
         if(row === 0 || row === 1) {
-            return border = <div className="border-top"></div> // Rename to border-bottom?
+            var border = <div className="border-top"></div> // Rename to border-bottom?
+			return border;
         }
         return '';
     },
@@ -127,7 +129,8 @@ var Row = React.createClass({
             location,
             row = this.props.row,
             rowName = this.getRowClassName(row),
-            border = this.getBorder(row);
+            border = this.getBorder(row),
+			Cells;
         Cells = [0,1,2].map(function (cell) {
             location = row * 3 + cell;
             status = '';
@@ -163,7 +166,7 @@ var Cell = React.createClass({
         } else if (cellLocation === 1) {
             return 'center';
         }
-		return 'right'
+		return 'right';
     },
     handleClick: function () {
         if (this.props.status || this.props.isGameOver) {
@@ -172,14 +175,15 @@ var Cell = React.createClass({
         this.props.onCellClick(this.props.location);
     },
     getFill: function (status, isInWinningSolution) {
+		// TODO: src picture path. Maybe, load these pictures with npm?
         if (status.keyName === 'playerX' && !isInWinningSolution) {
-            return <div><img src="images/X.svg" /></div>;
+            return <div><img src="/app/images/X.svg" /></div>;
         } else if (status.keyName === 'playerO' && !isInWinningSolution) {
-            return <div><img src="images/O.svg" /></div>;
+            return <div><img src="/app/images/O.svg" /></div>;
         } else if (status.keyName === 'playerX' && isInWinningSolution) {
-            return <div><img src="images/Red-X.svg" /></div>;
+            return <div><img src="/app/images/Red-X.svg" /></div>;
         } else if (status.keyName === 'playerO' && isInWinningSolution) {
-            return <div><img src="images/Red-O.svg" /></div>;
+            return <div><img src="/app/images/Red-O.svg" /></div>;
         }
         return '';
     },
@@ -199,4 +203,4 @@ var Cell = React.createClass({
     }
 });
 
-module.exports = Game;
+export { Game };

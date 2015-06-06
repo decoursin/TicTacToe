@@ -1,7 +1,8 @@
-var React = require('react'),
-    NewPlayersBtn = require("./buttons/NewPlayersBtn"),
-    Game = require("./game/Game"),
-    NewGameBtn = require("./buttons/NewGameBtn");
+import React from 'react';
+
+import {NewPlayersBtn} from './buttons/NewPlayersBtn';
+import {Game} from './game/Game';
+import {NewGameBtn} from './buttons/NewGameBtn';
 
 var App = React.createClass({
     handleModalSubmit: function (newPlayerX, newPlayerO) {
@@ -39,4 +40,4 @@ var App = React.createClass({
     }
 });
 
-module.exports = App;
+export { App };

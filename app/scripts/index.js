@@ -1,8 +1,8 @@
-var React = require('react'),
-	App = require('./App.jsx'),
-    mountNode = document.body,
-    model = require('./models/modelLocalStorage');
+import React from 'react';
+
+import {App} from './App';
+import {model} from './models/modelLocalStorage';
 
 window.React = React;
 
-React.render(<App model={model}/>, mountNode);
+React.render(<App model={model} />, document.body);

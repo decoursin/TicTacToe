@@ -1,4 +1,4 @@
-var _ = require('underscore');
+import _ from 'underscore';
 
 // Tests localStorage with Modernizer
 var LocalStorage = {
@@ -35,7 +35,7 @@ var createPlayers = function (newPlayerX, newPlayerO) {
             keyName: 'playerO'
         }
     }
-}
+};
 
 var isNewKey = false;
 
@@ -75,7 +75,7 @@ Model.prototype = _.extend(Model.prototype, {
     },
     clearPlayerCells: function () {
 		_.each(this.players, function (player) {
-			player.cells = []
+			player.cells = [];
 		});
 	},
 	createNewPlayers: function (newPlayerX, newPlayerO) {
@@ -89,6 +89,6 @@ Model.prototype = _.extend(Model.prototype, {
 	}
 });
 
-model = new Model('tic-tac-toe');
+var model = new Model('tic-tac-toe');
 
-module.exports = model;
+export { model };

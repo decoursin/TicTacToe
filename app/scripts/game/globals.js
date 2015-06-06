@@ -1,8 +1,8 @@
-var app = {};
+var globals = {};
 
-app.TIE_GAME = 'tie';
+globals.TIE_GAME = 'tie';
 
-app.solutions = {
+globals.solutions = {
     '0': [
         [1,2], // row0
         [3,6], // column0
@@ -45,6 +45,6 @@ app.solutions = {
         [2,5], // column2
         [0,4] // diagonal
     ]
-}
+};
 
-module.exports = app;
+export { globals };

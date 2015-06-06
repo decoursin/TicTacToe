@@ -1,4 +1,8 @@
-var React = require('react');
+import React from 'react';
+
+console.log("react: " + React);
+console.log(React);
+console.dir(React);
 
 var BootstrapButton = React.createClass({
     render: function () {
@@ -64,7 +68,7 @@ var BootstrapModal = React.createClass({
     }
 });
 
-var NewPlayers = React.createClass({
+var NewPlayersBtn = React.createClass({
     componentDidMount: function () {
         if(this.props.model.isNewKey()) {
             this.refs.modal.open();
@@ -86,4 +90,4 @@ var NewPlayers = React.createClass({
     }
 });
 
-module.exports = NewPlayers;
+export { NewPlayersBtn };

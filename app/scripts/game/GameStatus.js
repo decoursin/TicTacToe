@@ -1,11 +1,12 @@
-var React = require('react'),
-    app = require('./globals');
+import React from 'react';
+
+import {globals} from './globals';
 
 var GameStatus = React.createClass({
     render: function () {
         var status,
             winner = this.props.winner;
-        if(winner === app.TIE_GAME) {
+        if(winner === globals.TIE_GAME) {
             status = 'Tie Game!';
         }
         else if(winner) {
@@ -21,4 +22,4 @@ var GameStatus = React.createClass({
     }
 });
 
-module.exports = GameStatus;
+export { GameStatus };
