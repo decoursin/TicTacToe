@@ -5,6 +5,9 @@ globals.TIE_GAME = 'tie';
 globals.playerX = "playerX";
 globals.playerO = "playerO";
 
+globals.playerXdefaultDisplayName = "Player X";
+globals.playerOdefaultDisplayName = "Player O";
+
 globals.solutions = {
     '0': [
         [1,2], // row0

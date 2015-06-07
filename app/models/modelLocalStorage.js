@@ -1,10 +1,7 @@
 import _ from 'underscore';
 
-import {globals} from '../game/globals';
-
-function randomString () {
-	return Math.random().toString(36).substring(7);
-}
+import {Players, PlayerX, PlayerO} from '../Players';
+import {globals} from '../globals';
 
 // Tests localStorage with Modernizer
 var LocalStorage = {
@@ -24,48 +21,10 @@ var LocalStorage = {
     }
 };
 
-class Player {
-	/* player either be a string that is for displayname
-	 * or a full player with data meaning
-	 */
-	constructor(player) {
-		if (_.isString(player)) {
-			this.wins = 0;
-			this.cells = [];
-			this.displayName = player;
-			this.keyName = ""; // is set by new Players
-			return this;
-		}
-		if (_.isObject(player)) {
-			this.wins = player.wins;
-			this.cells = player.cells;
-			this.displayName = player.displayName;
-			this.keyName = player.keyName;
-			return this;
-		}
-		throw "Not valid input to Player::constructor"; 
-	}
-	isHis(location) {
-		return _.contains(this.cells, location);
-	}
-	setKeyName(keyName) {
-		this.keyName = keyName;
-	}
-}
-
-class Players {
-	constructor(playerX, playerO) {
-		playerX.setKeyName(globals.playerX);
-		playerO.setKeyName(globals.playerO);
-		this.PLAYERX = playerX;
-		this.PLAYERO = playerO;
-	}
-}
-
 var isNewKey = false;
 
 var Model = (function () {
-    return function (key) {
+    return function (key: string) {
         this.key = key;
         this.wasGameOver = false;
         var storage;
@@ -73,15 +32,15 @@ var Model = (function () {
         if (storage) {
 			let model, playerX, playerO;
             model = JSON.parse(storage);
-			playerX = new Player(model.players.PLAYERX);
-			playerO = new Player(model.players.PLAYERO);
+			playerX = new PlayerX(model.players.PLAYERX);
+			playerO = new PlayerO(model.players.PLAYERO);
 			this.players = new Players(playerX, playerO);
             this.wasGameOver = model.wasGameOver;
         }
 		else {
 			let playerX, playerO;
-			playerX = new Player();
-			playerO = new Player();
+			playerX = new PlayerX();
+			playerO = new PlayerO();
 			this.players = new Players(playerX, playerO);
 		}
         if(this.players && this.wasGameOver) {
@@ -111,8 +70,8 @@ Model.prototype = _.extend(Model.prototype, {
 		});
 	},
 	createNewPlayers: function (playerXname, playerOname) {
-		let playerX = new Player(playerXname);
-		let playerO = new Player(playerOname);
+		let playerX = new PlayerX(playerXname);
+		let playerO = new PlayerO(playerOname);
 		this.players = new Players(playerX, playerO);
 		this.wasGameOver = false;
 		this.store();

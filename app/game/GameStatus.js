@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {globals} from './globals';
+import {globals} from '../globals';
 
 var GameStatus = React.createClass({
     render: function () {

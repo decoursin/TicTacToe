@@ -1,9 +1,5 @@
 import React from 'react';
 
-console.log("react: " + React);
-console.log(React);
-console.dir(React);
-
 var BootstrapButton = React.createClass({
     render: function () {
         return (
