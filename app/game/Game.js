@@ -5,6 +5,8 @@ import {GameStatus} from './GameStatus';
 import {Scoreboard} from './Scoreboard';
 import {globals} from './globals';
 
+let NOBODY = '';
+
 var Game = React.createClass({
     getInitialState: function () {
 		var winningSolution = [],
@@ -27,13 +29,13 @@ var Game = React.createClass({
 			cells = player.cells,
 			winningSolution = false;
 		var possibleSolutions = globals.solutions[index];
-		_.each(possibleSolutions, function (arr) {
+		possibleSolutions.filter(arr => {
 			if(_.contains(cells, arr[0]) && _.contains(cells, arr[1])) {
 				winningSolution = arr;
 				winningSolution.push(index);
                 return;
 			}
-		}, this);
+		});
 		return winningSolution
     },
     handleCellClick: function (location) {
@@ -125,25 +127,25 @@ var Row = React.createClass({
         return '';
     },
     render: function () {
-        var status = '',
+        var owner = NOBODY,
             location,
             row = this.props.row,
             rowName = this.getRowClassName(row),
             border = this.getBorder(row),
 			Cells;
-        Cells = [0,1,2].map(function (cell) {
-            location = row * 3 + cell;
-            status = '';
-            _.each(this.props.players, function (player) {
-                if(_.contains(player.cells, location)) {
-                    status = player;
-                    return;
-                }
-            });
+        Cells = [0,1,2].map((columnNumber) => {
+            location = row * 3 + columnNumber; // row is 1, 2, or 3; location is 0-8
+            owner = NOBODY;
+			if(this.props.players.PLAYERX.isHis(location)) {
+				owner = this.props.players.PLAYERX;
+			}
+			if(this.props.players.PLAYERO.isHis(location)) {
+				owner = this.props.players.PLAYERO;
+			}
             return <Cell key={location}
                          onCellClick={this.props.onCellClick}
                          location={location}
-                         status={status}
+                         owner={owner}
                          isGameOver={this.props.isGameOver}
                          isInWinningSolution={_.contains(this.props.winningSolution, location) ? true : false}
                    />
@@ -169,27 +171,26 @@ var Cell = React.createClass({
 		return 'right';
     },
     handleClick: function () {
-        if (this.props.status || this.props.isGameOver) {
+        if (this.props.owner || this.props.isGameOver) {
             return;
         }
         this.props.onCellClick(this.props.location);
     },
-    getFill: function (status, isInWinningSolution) {
-		// TODO: src picture path. Maybe, load these pictures with npm?
-        if (status.keyName === 'playerX' && !isInWinningSolution) {
-            return <div><img src="/app/images/X.svg" /></div>;
-        } else if (status.keyName === 'playerO' && !isInWinningSolution) {
-            return <div><img src="/app/images/O.svg" /></div>;
-        } else if (status.keyName === 'playerX' && isInWinningSolution) {
-            return <div><img src="/app/images/Red-X.svg" /></div>;
-        } else if (status.keyName === 'playerO' && isInWinningSolution) {
-            return <div><img src="/app/images/Red-O.svg" /></div>;
+    getFill: function (owner, isInWinningSolution) {
+        if (owner.keyName === globals.playerX && !isInWinningSolution) {
+            return <div><img src="images/X.svg" /></div>;
+        } else if (owner.keyName === globals.playerO && !isInWinningSolution) {
+            return <div><img src="images/O.svg" /></div>;
+        } else if (owner.keyName === globals.playerX && isInWinningSolution) {
+            return <div><img src="images/Red-X.svg" /></div>;
+        } else if (owner.keyName === globals.playerO && isInWinningSolution) {
+            return <div><img src="images/Red-O.svg" /></div>;
         }
         return '';
     },
     render: function () {
-        var status = this.props.status,
-            fill = this.getFill(status, this.props.isInWinningSolution),
+        var owner = this.props.owner,
+            fill = this.getFill(owner, this.props.isInWinningSolution),
             isGameOver = this.props.isGameOver,
             className = this.getClassName(this.props.location);
 		className = "cell " + className + " col-xs-2 col-sm-2 col-md-2 col-lg-2";

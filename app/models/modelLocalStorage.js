@@ -1,5 +1,11 @@
 import _ from 'underscore';
 
+import {globals} from '../game/globals';
+
+function randomString () {
+	return Math.random().toString(36).substring(7);
+}
+
 // Tests localStorage with Modernizer
 var LocalStorage = {
     getItem: function (key) {
@@ -18,24 +24,43 @@ var LocalStorage = {
     }
 };
 
-var createPlayers = function (newPlayerX, newPlayerO) {
-    var playerX = newPlayerX || 'Player X';
-    var playerO = newPlayerO || 'Player O';
-    return {
-        'PLAYERX': {
-            wins: 0,
-            displayName: playerX,
-            cells: [],
-            keyName: 'playerX'
-        },
-        'PLAYERO': {
-            wins: 0,
-            displayName: playerO,
-            cells: [],
-            keyName: 'playerO'
-        }
-    }
-};
+class Player {
+	/* player either be a string that is for displayname
+	 * or a full player with data meaning
+	 */
+	constructor(player) {
+		if (_.isString(player)) {
+			this.wins = 0;
+			this.cells = [];
+			this.displayName = player;
+			this.keyName = ""; // is set by new Players
+			return this;
+		}
+		if (_.isObject(player)) {
+			this.wins = player.wins;
+			this.cells = player.cells;
+			this.displayName = player.displayName;
+			this.keyName = player.keyName;
+			return this;
+		}
+		throw "Not valid input to Player::constructor"; 
+	}
+	isHis(location) {
+		return _.contains(this.cells, location);
+	}
+	setKeyName(keyName) {
+		this.keyName = keyName;
+	}
+}
+
+class Players {
+	constructor(playerX, playerO) {
+		playerX.setKeyName(globals.playerX);
+		playerO.setKeyName(globals.playerO);
+		this.PLAYERX = playerX;
+		this.PLAYERO = playerO;
+	}
+}
 
 var isNewKey = false;
 
@@ -43,15 +68,22 @@ var Model = (function () {
     return function (key) {
         this.key = key;
         this.wasGameOver = false;
-        this.players = createPlayers();
-        var storage,
-            model;
+        var storage;
         storage = LocalStorage.getItem(key);
-        if(storage) {
+        if (storage) {
+			let model, playerX, playerO;
             model = JSON.parse(storage);
-            this.players = model.players;
+			playerX = new Player(model.players.PLAYERX);
+			playerO = new Player(model.players.PLAYERO);
+			this.players = new Players(playerX, playerO);
             this.wasGameOver = model.wasGameOver;
         }
+		else {
+			let playerX, playerO;
+			playerX = new Player();
+			playerO = new Player();
+			this.players = new Players(playerX, playerO);
+		}
         if(this.players && this.wasGameOver) {
             this.clearPlayerCells();
         }
@@ -78,8 +110,10 @@ Model.prototype = _.extend(Model.prototype, {
 			player.cells = [];
 		});
 	},
-	createNewPlayers: function (newPlayerX, newPlayerO) {
-		this.players = createPlayers(newPlayerX, newPlayerO);
+	createNewPlayers: function (playerXname, playerOname) {
+		let playerX = new Player(playerXname);
+		let playerO = new Player(playerOname);
+		this.players = new Players(playerX, playerO);
 		this.wasGameOver = false;
 		this.store();
 	},
