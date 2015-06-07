@@ -3,7 +3,7 @@ import _ from 'underscore';
 
 import {GameStatus} from './GameStatus';
 import {Scoreboard} from './Scoreboard';
-import {globals} from '../globals';
+import {globals} from '../../constants/globals';
 
 let NOBODY = '';
 

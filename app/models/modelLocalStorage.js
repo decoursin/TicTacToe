@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
-import {Players, PlayerX, PlayerO} from '../Players';
-import {globals} from '../globals';
+import {Players, PlayerX, PlayerO} from '../constants/Players';
+import {globals} from '../constants/globals';
 
 // Tests localStorage with Modernizer
 var LocalStorage = {
