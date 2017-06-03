@@ -1,6 +1,6 @@
 # Tic Tac Toe
 
-Link to game: https://whispering-sierra-4999.herokuapp.com/
+Link to game: http://tictactoe-nick.s3-website-us-east-1.amazonaws.com/
 
 #### Features
 Visible features:
